@@ -1,0 +1,42 @@
+<?php
+
+declare(strict_types=1);
+/**
+ * @var $block \Avalon\Dskapipayment\Block\Adminhtml\Order\View\Tab\DskapiTab
+ */
+?>
+
+<?php if ($block->checkDskapi()) { ?>
+    <div>
+        <div class="fieldset-wrapper-title">
+            <span class="title">
+                <?= $block->escapeHtml('Информация за плащане на поръчката с DSK Credit покупки на Кредит') ?>
+            </span>
+        </div>
+        <table class="admin__table-secondary">
+            <tbody>
+                <?= $block->getChildHtml(); ?>
+                <tr>
+                    <th><?= $block->escapeHtml('Поръчка № :') ?></th>
+                    <td><?= $block->escapeHtml($block->getOrderIncrementId()) ?></td>
+                </tr>
+                <tr>
+                    <th><?= $block->escapeHtml('Състояние :') ?></th>
+                    <td>
+                        <span>
+                            <?= $block->escapeHtml($block->getPaymentData('order_status')) ?>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+<?php } else { ?>
+    <div class="fieldset-wrapper order-information">
+        <div class="fieldset-wrapper-title">
+            <span class="title">
+                <?= $block->escapeHtml('Няма извършено плащане с DSK Credit покупки на Кредит') ?>
+            </span>
+        </div>
+    </div>
+<?php } ?>

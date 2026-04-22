@@ -1,0 +1,164 @@
+<?php
+if ($block->isStatus()) {
+    if ($block->isServerStatus()) { ?>
+        <style>
+            @font-face {
+                font-family: 'squad-regular';
+                src: url('<?= $block->escapeUrl($block->getViewFileUrl('Avalon_Dskapipayment::css/Squad-Regular.woff2')) ?>') format('woff2'),
+                    url('<?= $block->escapeUrl($block->getViewFileUrl('Avalon_Dskapipayment::css/Squad-Regular.woff')) ?>') format('woff');
+                font-weight: normal;
+                font-style: normal;
+            }
+
+            @font-face {
+                font-family: 'squad-bold';
+                src: url('<?= $block->escapeUrl($block->getViewFileUrl('Avalon_Dskapipayment::css/Squad-Bold.woff2')) ?>') format('woff2'),
+                    url('<?= $block->escapeUrl($block->getViewFileUrl('Avalon_Dskapipayment::css/Squad-Bold.woff')) ?>') format('woff');
+                font-weight: bold;
+                font-style: normal;
+            }
+
+            /* dskapi float */
+            .dskapi_float {
+                z-index: 999;
+                position: fixed;
+                width: 60px;
+                height: 60px;
+                top: calc(100% / 2 + 130px);
+                left: 0px;
+                background-color: #ffffff;
+                border-top: 1px solid #006648;
+                border-right: 1px solid #006648;
+                border-bottom: 1px solid #006648;
+                color: #FFF;
+                border-top-right-radius: 8px;
+                border-bottom-right-radius: 8px;
+                text-align: center;
+                box-shadow: 2px 2px 3px #999;
+                cursor: pointer;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .dskapi-my-float {
+                width: 40px;
+                height: 35px;
+            }
+
+            .dskapi-label-container {
+                z-index: 999;
+                position: fixed;
+                top: calc(100% / 2 + 30px);
+                left: 67px;
+                display: table;
+                visibility: hidden;
+            }
+
+            .dskapi-label-text {
+                width: 410px;
+                height: 260px;
+                color: #006648;
+                vertical-align: top;
+                padding-left: 5px;
+                border-radius: 14.5px;
+                background-color: #ffffff;
+                overflow: none;
+            }
+
+            .dskapi-label-text-mask {
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                border-radius: 14.5px;
+                background-color: #ffffff;
+                -webkit-box-shadow: 0px 0px 30px 0px #000000;
+                box-shadow: 0px 0px 30px 0px #000000;
+            }
+
+            .dskapi_header {
+                margin: 0 0 7.7px;
+                border-radius: 14.5px 14.5px 0px 0px;
+                object-fit: contain;
+            }
+
+            p.dskapi_txt1 {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding: 5px 15px;
+                margin: 0px;
+                font-family: squad-bold;
+                font-size: 18px;
+                line-height: 18px;
+                text-align: center;
+                color: #006648;
+                background-color: white;
+            }
+
+            p.dskapi_txt2 {
+                padding: 0px 15px;
+                margin: 0px;
+                font-family: squad-regular;
+                font-size: 12px;
+                line-height: 12px;
+                text-align: center;
+                color: #414546;
+                background-color: white;
+            }
+
+            p.dskapi-label-text-a {
+                font-family: squad-regular;
+                font-weight: 300;
+                font-size: 14px;
+                padding: 5px 15px 0px 15px;
+                text-align: center;
+                text-decoration: underline;
+                color: #52AE30;
+                cursor: pointer;
+            }
+
+            p.dskapi-label-text-a:hover {
+                color: #52AE30;
+            }
+
+            p.dskapi-label-text-a:visited {
+                color: #52AE30;
+            }
+
+            /* dskapi float */
+        </style>
+
+        <?php if ($block->getDskapiDeviceIs() == "Yes") { ?>
+            <div class="dskapi_float" onclick="window.open('<?= $block->escapeUrl($block->getHelper()->getDskapiLiveUrl()) ?>/procedure.php', '_blank');">
+            <?php } else { ?>
+                <div class="dskapi_float" onclick="DskapiChangeContainer();">
+                <?php } ?>
+                <img src="<?= $block->escapeUrl($block->getHelper()->getDskapiLiveUrl()) ?>/dist/img/dsk_logo.png" class="dskapi-my-float">
+                </div>
+                <div class="dskapi-label-container">
+                    <div class="dskapi-label-text">
+                        <div class="dskapi-label-text-mask">
+                            <img src="<?= $block->escapeHtml($block->getParamsDskapi()->dsk_picture) ?>" class="dskapi_header">
+                            <p class="dskapi_txt1"><?= $block->escapeHtml($block->getParamsDskapi()->dsk_container_txt1) ?></p>
+                            <p class="dskapi_txt2"><?= $block->escapeHtml($block->getParamsDskapi()->dsk_container_txt2) ?></p>
+                            <p class="dskapi-label-text-a"><a href="<?= $block->escapeHtml($block->getParamsDskapi()->dsk_logo_url) ?>" target="_blank" alt="За повече информация">За повече информация</a></p>
+                        </div>
+                    </div>
+                </div>
+                <script type="application/javascript">
+                    function DskapiChangeContainer() {
+                        const dskapi_label_container = document.getElementsByClassName("dskapi-label-container")[0];
+                        if (dskapi_label_container.style.visibility == 'visible') {
+                            dskapi_label_container.style.visibility = 'hidden';
+                            dskapi_label_container.style.opacity = 0;
+                            dskapi_label_container.style.transition = 'visibility 0s, opacity 0.5s ease';
+                        } else {
+                            dskapi_label_container.style.visibility = 'visible';
+                            dskapi_label_container.style.opacity = 1;
+                        }
+                    }
+                </script>
+        <?php
+    }
+}

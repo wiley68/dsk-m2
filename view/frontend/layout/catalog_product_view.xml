@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Avalon_Dskapipayment/css/dskapi.css"/>
+        <link src="Avalon_Dskapipayment/js/dskapi_product.js"/>
+    </head>
+    <body>
+        <referenceBlock name="product.info.addto">
+            <block class="Avalon\Dskapipayment\Block\Buttons" name="costompayment_buttons_dskapi" template="Avalon_Dskapipayment::buttons.phtml" />
+        </referenceBlock>
+    </body>
+</page> 

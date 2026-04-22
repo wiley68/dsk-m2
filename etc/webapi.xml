@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/webapi.xsd">
+    <route url="/V1/dskapi/updateOrder" method="POST">
+        <service class="Avalon\Dskapipayment\Api\StatusInterface" method="orderUpdate"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+</routes>

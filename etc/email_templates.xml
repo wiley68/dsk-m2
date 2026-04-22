@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+    <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Email:etc/email_templates.xsd">
+    <template id="avalon_dskapipaymentmethod_tab_options_dskapi_template" label="Default template" file="avalon_dskapipayment_template.html" type="html" module="Avalon_Dskapipayment" area="frontend"/>
+</config>

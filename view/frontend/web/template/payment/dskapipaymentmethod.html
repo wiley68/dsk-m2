@@ -1,0 +1,255 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div
+    class="payment-method"
+    data-bind="css: {'_active': (getCode() == isChecked())}, visible: getDskapiStatus()"
+>
+    <div class="payment-method-title field choice">
+        <input
+            type="radio"
+            name="payment[method]"
+            class="radio"
+            data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"
+        />
+        <label data-bind="attr: {'for': getCode()}" class="label"
+            ><span>Банка ДСК</span></label
+        >
+    </div>
+    <div class="payment-method-content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+        <div class="payment-method-billing-address">
+            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+        <div class="checkout-agreements-block">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+        С избора си да финансирате покупката чрез Банка ДСК Вие декларирате, че
+        сте запознат с Информацията относно обработването на лични данни на
+        физически лица от Банка ДСК АД.
+        <br />
+        <a
+            target="_blank"
+            href="https://dskbank.bg/docs/default-source/gdpr/%D0%B8%D0%BD%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%86%D0%B8%D1%8F-%D0%BE%D1%82%D0%BD%D0%BE%D1%81%D0%BD%D0%BE-%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B2%D0%B0%D0%BD%D0%B5%D1%82%D0%BE-%D0%BD%D0%B0-%D0%BB%D0%B8%D1%87%D0%BD%D0%B8-%D0%B4%D0%B0%D0%BD%D0%BD%D0%B8-%D0%BD%D0%B0-%D1%84%D0%B8%D0%B7%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%B8-%D0%BB%D0%B8%D1%86%D0%B0-%D0%BE%D1%82-%D0%B1%D0%B0%D0%BD%D0%BA%D0%B0-%D0%B4%D1%81%D0%BA-%D0%B0%D0%B4-%D0%B8-%D1%81%D1%8A%D0%B3%D0%BB%D0%B0%D1%81%D0%B8%D1%8F-%D0%B7%D0%B0-%D0%BE%D0%B1%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%B2%D0%B0%D0%BD%D0%B5-%D0%BD%D0%B0-%D0%BB%D0%B8%D1%87%D0%BD%D0%B8-%D0%B4%D0%B0%D0%BD%D0%BD%D0%B8.pdf"
+            >Информация относно обработването на лични данни на физически лица
+            от 'Банка ДСК' АД</a
+        >
+        <br style="clear: both" />
+        <br style="clear: both" />
+        <a
+            href="#"
+            id="dskapi_checkout_interest_rates_link"
+            style="cursor: pointer"
+            data-bind="click: openDskapiPopup"
+        >
+            Лихвени схеми
+        </a>
+        <div id="loading-overlay" data-bind="visible: dskapiloading"></div>
+        <!-- DSK API Popup Container -->
+        <div
+            id="dskapi-checkout-popup-container"
+            class="modalpayment_dskapi"
+            style="display: none"
+        >
+            <div class="modalpayment-content_dskapi">
+                <div id="dskapi_checkout_body">
+                    <div
+                        class="dskapi_PopUp_Detailed_v1"
+                        id="dskapi_checkout_popup_detailed"
+                    >
+                        <div class="dskapi_Mask" id="dskapi_checkout_mask">
+                            <img
+                                src=""
+                                id="dskapi_checkout_header_img"
+                                class="dskapi_header"
+                                data-bind="attr: {src: dskapiCheckoutPicture}"
+                            />
+                            <p
+                                class="dskapi_product_name"
+                                id="dskapi_checkout_product_name"
+                            >
+                                Купи на изплащане със стоков кредит от Банка ДСК
+                            </p>
+                            <div
+                                class="dskapi_body_panel_txt3"
+                                id="dskapi_checkout_body_panel_txt3"
+                            >
+                                <div
+                                    class="dskapi_body_panel_txt3_left"
+                                    id="dskapi_checkout_body_panel_txt3_left"
+                                >
+                                    <p>
+                                        • Улеснена процедура за електронно
+                                        подписване<br />
+                                        • Атрактивни условия по кредита<br />
+                                        • Параметри изцяло по Ваш избор<br />
+                                        • Одобрение до няколко минути изцяло
+                                        онлайн
+                                    </p>
+                                </div>
+                                <div
+                                    class="dskapi_body_panel_txt3_right"
+                                    id="dskapi_checkout_body_panel_txt3_right"
+                                >
+                                    <select
+                                        id="dskapi_checkout_pogasitelni_vnoski_input"
+                                        class="dskapi_txt_right"
+                                        data-bind="
+                                            options: dskapiCheckoutVnoskiOptions,
+                                            optionsText: 'label',
+                                            optionsValue: 'value',
+                                            value: dskapiCheckoutSelectedVnoski,
+                                            event: { focus: onDskapiCheckoutVnoskiFocus, change: onDskapiCheckoutVnoskiChange }
+                                        "
+                                    ></select>
+                                    <div
+                                        class="dskapi_sumi_panel"
+                                        id="dskapi_checkout_sumi_panel"
+                                    >
+                                        <div
+                                            class="dskapi_kredit_panel"
+                                            id="dskapi_checkout_kredit_panel"
+                                        >
+                                            <div class="dskapi_sumi_txt">
+                                                Размер на кредита /<span
+                                                    data-bind="text: dskapiCheckoutSign"
+                                                ></span
+                                                >/
+                                            </div>
+                                            <div>
+                                                <input
+                                                    class="dskapi_mesecna_price"
+                                                    type="text"
+                                                    id="dskapi_checkout_price_txt"
+                                                    readonly="readonly"
+                                                    data-bind="value: dskapiCheckoutPrice"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="dskapi_kredit_panel"
+                                            id="dskapi_checkout_kredit_panel_vnoska"
+                                        >
+                                            <div class="dskapi_sumi_txt">
+                                                Месечна вноска /<span
+                                                    data-bind="text: dskapiCheckoutSign"
+                                                ></span
+                                                >/
+                                            </div>
+                                            <div>
+                                                <input
+                                                    class="dskapi_mesecna_price"
+                                                    type="text"
+                                                    id="dskapi_checkout_vnoska"
+                                                    readonly="readonly"
+                                                    data-bind="value: dskapiCheckoutVnoska"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="dskapi_sumi_panel"
+                                        id="dskapi_checkout_sumi_panel_2"
+                                    >
+                                        <div
+                                            class="dskapi_kredit_panel"
+                                            id="dskapi_checkout_kredit_panel_obshto"
+                                        >
+                                            <div class="dskapi_sumi_txt">
+                                                Обща дължима сума /<span
+                                                    data-bind="text: dskapiCheckoutSign"
+                                                ></span
+                                                >/
+                                            </div>
+                                            <div>
+                                                <input
+                                                    class="dskapi_mesecna_price"
+                                                    type="text"
+                                                    id="dskapi_checkout_obshtozaplashtane"
+                                                    readonly="readonly"
+                                                    data-bind="value: dskapiCheckoutObshtozaplashtane"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="dskapi_kredit_panel"
+                                            id="dskapi_checkout_kredit_panel_gpr"
+                                        >
+                                            <div class="dskapi_sumi_txt">
+                                                ГПР /%/
+                                            </div>
+                                            <div>
+                                                <input
+                                                    class="dskapi_mesecna_price"
+                                                    type="text"
+                                                    id="dskapi_checkout_gpr"
+                                                    readonly="readonly"
+                                                    data-bind="value: dskapiCheckoutGpr"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                class="dskapi_body_panel_txt4"
+                                id="dskapi_checkout_body_panel_txt4"
+                            >
+                                Изчисленията са направени при допускането за
+                                първа падежна дата след 30 дни и са с насочваща
+                                цел. Избери най-подходящата месечна вноска.
+                            </div>
+                            <div
+                                class="dskapi_body_panel_footer"
+                                id="dskapi_checkout_body_panel_footer"
+                            >
+                                <div
+                                    class="dskapi_btn"
+                                    id="dskapi_checkout_close_credit"
+                                    data-bind="click: closeDskapiCheckoutPopup"
+                                >
+                                    Затвори
+                                </div>
+                                <div
+                                    class="dskapi_body_panel_left"
+                                    id="dskapi_checkout_body_panel_left"
+                                >
+                                    <div
+                                        class="dskapi_txt_footer"
+                                        data-bind="text: 'Ver. ' + dskapiCheckoutModuleVersion()"
+                                    ></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button
+                    class="action primary checkout"
+                    type="submit"
+                    data-bind="
+                        click: placeOrder,
+                        attr: {title: $t('Place Order')},
+                        css: {disabled: !isPlaceOrderActionAllowed()},
+                        enable: (getCode() == isChecked())
+                        "
+                    disabled
+                >
+                    <span data-bind="i18n: 'Place Order'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

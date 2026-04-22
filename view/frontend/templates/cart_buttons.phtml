@@ -1,0 +1,190 @@
+<?php if ($block->getDskapiStatus() == "1" && $block->getStatus()) { ?>
+    <div id="dskapi-cart-button-container" style="margin-top: <?= $block->escapeHtml($block->getDskapiGap()) ?>px;">
+        <?php if ($block->getParamsDskapi()->dsk_zaglavie != '') { ?>
+            <div class="dskapi_button_div_txt">
+                <?= $block->escapeHtml($block->getParamsDskapi()->dsk_zaglavie) ?>
+            </div>
+        <?php } ?>
+        <?php if ($block->escapeHtml($block->getParamsDskapi()->dsk_custom_button_status == 1)) { ?>
+            <img
+                id="btn_dskapi_cart"
+                class="dskapi_btn_click dskapi_logo"
+                src="<?= $block->escapeHtml($block->getDskapiButtonNormalCustom()) ?>"
+                alt="Кредитен калкулатор DSK Credit"
+                onmouseover="this.src='<?= $block->escapeHtml($block->getDskapiButtonHoverCustom()) ?>'"
+                onmouseout="this.src='<?= $block->escapeHtml($block->getDskapiButtonNormalCustom()) ?>'" />
+        <?php } else { ?>
+            <?php if ($block->escapeHtml($block->getParamsDskapi()->dsk_isvnoska == 1)) { ?>
+                <table class="dskapi_table_img">
+                    <tr>
+                        <td class="dskapi_button_table">
+                            <img
+                                id="btn_dskapi_cart"
+                                class="dskapi_btn_click dskapi_logo"
+                                src="<?= $block->escapeHtml($block->getDskapiButtonNormal()) ?>"
+                                alt="Кредитен калкулатор DSK Credit"
+                                onmouseover="this.src='<?= $block->escapeHtml($block->getDskapiButtonHover()) ?>'"
+                                onmouseout="this.src='<?= $block->escapeHtml($block->getDskapiButtonNormal()) ?>'" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="dskapi_button_table">
+                            <p><span id="dskapi_vnoski_txt"><?= $block->escapeHtml($block->getParamsDskapi()->dsk_vnoski_default) ?></span> x <span id="dskapi_vnoska_txt"><?= $block->escapeHtml(number_format($block->getParamsDskapi()->dsk_vnoska, 2, '.', '')) ?></span> <?= $block->escapeHtml($block->getDskapiSign()) ?></p>
+                        </td>
+                    </tr>
+                </table>
+            <?php } else { ?>
+                <img
+                    id="btn_dskapi_cart"
+                    class="dskapi_btn_click dskapi_logo"
+                    src="<?= $block->escapeHtml($block->getDskapiButtonNormal()) ?>"
+                    alt="Кредитен калкулатор DSK Credit"
+                    onmouseover="this.src='<?= $block->escapeHtml($block->getDskapiButtonHover()) ?>'"
+                    onmouseout="this.src='<?= $block->escapeHtml($block->getDskapiButtonNormal()) ?>'" />
+            <?php } ?>
+        <?php } ?>
+    </div>
+    <input
+        type="hidden"
+        id="dskapi_price"
+        value="<?= $block->escapeHtml($block->getPrice()) ?>" />
+    <input
+        type="hidden"
+        id="dskapi_cid"
+        value="<?= $block->escapeHtml($block->getDskapiCid()) ?>" />
+    <input
+        type="hidden"
+        id="dskapi_product_id"
+        value="<?= $block->escapeHtml($block->getCartProductId()) ?>" />
+    <input
+        type="hidden"
+        id="DSKAPI_LIVEURL"
+        value="<?= $block->escapeHtml($block->getDskapiLiveUrl()) ?>" />
+    <input
+        type="hidden"
+        id="dskapi_button_status"
+        value="<?= $block->escapeHtml($block->getParamsDskapi()->dsk_button_status) ?>" />
+    <input
+        type="hidden"
+        id="dskapi_maxstojnost"
+        value="<?= $block->escapeHtml($block->getParamsDskapi()->dsk_maxstojnost) ?>" />
+    <input
+        type="hidden"
+        id="dskapi_eur"
+        value="<?= $block->escapeHtml($block->getEur()) ?>" />
+    <input
+        type="hidden"
+        id="dskapi_currency_code"
+        value="<?= $block->escapeHtml($block->getCurrencyCode()) ?>" />
+    <div
+        id="dskapi-product-popup-container"
+        class="modalpayment_dskapi">
+        <div class="modalpayment-content_dskapi">
+            <div id="dskapi_body">
+                <div class="<?= $block->escapeHtml($block->getDskapiClasses()->dskapi_PopUp_Detailed_v1) ?>">
+                    <div class="<?= $block->escapeHtml($block->getDskapiClasses()->dskapi_Mask) ?>">
+                        <img
+                            src="<?= $block->escapeHtml($block->getDskapiClasses()->dskapi_picture) ?>"
+                            class="dskapi_header">
+                        <p class="<?= $block->escapeHtml($block->getDskapiClasses()->dskapi_product_name) ?>">Купи на
+                            изплащане със стоков кредит от Банка ДСК</p>
+                        <div class="<?= $block->escapeHtml($block->getDskapiClasses()->dskapi_body_panel_txt3) ?>">
+                            <div class="<?= $block->escapeHtml($block->getDskapiClasses()->dskapi_body_panel_txt3_left) ?>">
+                                <p>
+                                    • Улеснена процедура за електронно подписване<br />
+                                    • Атрактивни условия по кредита<br />
+                                    • Параметри изцяло по Ваш избор<br />
+                                    • Одобрение до няколко минути изцяло онлайн
+                                </p>
+                            </div>
+                            <div class="<?= $block->escapeHtml($block->getDskapiClasses()->dskapi_body_panel_txt3_right) ?>">
+                                <select
+                                    id="dskapi_pogasitelni_vnoski_input"
+                                    class="dskapi_txt_right"
+                                    onchange="dskapi_pogasitelni_vnoski_input_change();"
+                                    onfocus="dskapi_pogasitelni_vnoski_input_focus(this.value);">
+                                    <?php for ($i = 3; $i <= 48; $i++) { ?>
+                                        <?php if ($block->getVnoskiVisibleArr()[$i]) { ?>
+                                            <option
+                                                value="<?= $block->escapeHtml($i) ?>"
+                                                <?php if ($block->getParamsDskapi()->dsk_vnoski_default == $i) {
+                                                    echo "selected";
+                                                }
+                                                ?>><?= $block->escapeHtml($i) ?> месеца</option>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </select>
+                                <div class="<?= $block->escapeHtml($block->getDskapiClasses()->dskapi_sumi_panel) ?>">
+                                    <div class="<?= $block->escapeHtml($block->getDskapiClasses()->dskapi_kredit_panel) ?>">
+                                        <div class="dskapi_sumi_txt">Размер на кредита /<?= $block->escapeHtml($block->getDskapiSign()) ?>/</div>
+                                        <div>
+                                            <input
+                                                class="dskapi_mesecna_price"
+                                                type="text"
+                                                id="dskapi_price_txt"
+                                                readonly="readonly"
+                                                value="<?= $block->escapeHtml(number_format($block->getPrice(), 2, ".", "")) ?>" />
+                                        </div>
+                                    </div>
+                                    <div class="<?= $block->escapeHtml($block->getDskapiClasses()->dskapi_kredit_panel) ?>">
+                                        <div class="dskapi_sumi_txt">Месечна вноска /<?= $block->escapeHtml($block->getDskapiSign()) ?>/</div>
+                                        <div>
+                                            <input
+                                                class="dskapi_mesecna_price"
+                                                type="text"
+                                                id="dskapi_vnoska"
+                                                readonly="readonly"
+                                                value="<?= $block->escapeHtml(number_format($block->getParamsDskapi()->dsk_vnoska, 2, ".", "")) ?>" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="<?= $block->escapeHtml($block->getDskapiClasses()->dskapi_sumi_panel) ?>">
+                                    <div class="<?= $block->escapeHtml($block->getDskapiClasses()->dskapi_kredit_panel) ?>">
+                                        <div class="dskapi_sumi_txt">Обща дължима сума /<?= $block->escapeHtml($block->getDskapiSign()) ?>/</div>
+                                        <div>
+                                            <input
+                                                class="dskapi_mesecna_price"
+                                                type="text"
+                                                id="dskapi_obshtozaplashtane"
+                                                readonly="readonly"
+                                                value="<?= $block->escapeHtml(number_format($block->getParamsDskapi()->dsk_vnoska * $block->getParamsDskapi()->dsk_vnoski_default, 2, ".", "")); ?>" />
+                                        </div>
+                                    </div>
+                                    <div class="<?= $block->escapeHtml($block->getDskapiClasses()->dskapi_kredit_panel) ?>">
+                                        <div class="dskapi_sumi_txt">ГПР /%/</div>
+                                        <div>
+                                            <input
+                                                class="dskapi_mesecna_price"
+                                                type="text"
+                                                id="dskapi_gpr"
+                                                readonly="readonly"
+                                                value="<?= $block->escapeHtml(number_format($block->getParamsDskapi()->dsk_gpr, 2, ".", "")) ?>" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="<?= $block->escapeHtml($block->getDskapiClasses()->dskapi_body_panel_txt4) ?>">
+                            Изчисленията са направени при допускането за първа падежна дата след 30 дни и са с насочваща
+                            цел. Избери най-подходящата месечна вноска.
+                        </div>
+                        <div class="<?= $block->escapeHtml($block->getDskapiClasses()->dskapi_body_panel_footer) ?>">
+                            <div
+                                class="dskapi_btn"
+                                id="dskapi_buy_credit">Купи на изплащане</div>
+                            <div
+                                class="dskapi_btn_cancel"
+                                id="dskapi_back_credit">Откажи</div>
+                            <div class="<?= $block->escapeHtml($block->getDskapiClasses()->dskapi_body_panel_left) ?>">
+                                <div class="dskapi_txt_footer">Ver. <?= $block->escapeHtml($block->getModuleVersion()) ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php
+}
+?>

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+    <default>
+        <avalon_dskapipaymentmethod_tab_options>
+            <properties_dskapi>
+                <dskapi_gap>0</dskapi_gap>
+            </properties_dskapi>
+        </avalon_dskapipaymentmethod_tab_options>
+        <payment>
+            <dskapipaymentmethod>
+                <active>1</active>
+                <title>Банка ДСК покупки на Кредит</title>
+                <order_status>pending_payment</order_status>
+                <instructions>Инструкции</instructions>
+                <payment_action>true</payment_action>
+                <model>Avalon\Dskapipayment\Model\DskapiPaymentMethod</model>
+                <group>offline</group>
+            </dskapipaymentmethod>
+            <!-- payment-config -->
+        </payment>
+    </default>
+</config>
