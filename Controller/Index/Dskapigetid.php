@@ -291,7 +291,7 @@ class Dskapigetid implements \Magento\Framework\App\Action\HttpPostActionInterfa
                 $shippingstreet = $this->getOrder()->getShippingAddress()->getStreet();
             }
 
-            $dskapi_price = $this->getOrder()->getGrandTotal();
+            $dskapi_price = (float)$this->getOrder()->getGrandTotal();
 
             if ($this->getOrder()->getCustomerId() === null) {
                 $dskapi_fname =
@@ -347,13 +347,13 @@ class Dskapigetid implements \Magento\Framework\App\Action\HttpPostActionInterfa
                 case 1:
                     $dskapi_currency_code_send = 0;
                     if ($dskapi_currency_code == "EUR") {
-                        $dskapi_price = number_format($dskapi_price * 1.95583, 2, ".", "");
+                        $dskapi_price = $dskapi_price * 1.95583;
                     }
                     break;
                 case 2:
                     $dskapi_currency_code_send = 1;
                     if ($dskapi_currency_code == "BGN") {
-                        $dskapi_price = number_format($dskapi_price / 1.95583, 2, ".", "");
+                        $dskapi_price = $dskapi_price / 1.95583;
                     }
                     break;
             }
@@ -372,22 +372,22 @@ class Dskapigetid implements \Magento\Framework\App\Action\HttpPostActionInterfa
                 $products_q .= $cart_item->getQtyOrdered();
                 $products_q .= '_';
 
-                $products_p_temp = $cart_item->getPrice();
+                $products_p_temp = (float)$cart_item->getPrice();
                 switch ($this->getEur()) {
                     case 0:
                         break;
                     case 1:
                         if ($dskapi_currency_code == "EUR") {
-                            $products_p_temp = number_format($products_p_temp * 1.95583, 2, ".", "");
+                            $products_p_temp = $products_p_temp * 1.95583;
                         }
                         break;
                     case 2:
                         if ($dskapi_currency_code == "BGN") {
-                            $products_p_temp = number_format($products_p_temp / 1.95583, 2, ".", "");
+                            $products_p_temp = $products_p_temp / 1.95583;
                         }
                         break;
                 }
-                $products_p .= $products_p_temp;
+                $products_p .= number_format($products_p_temp, 2, ".", "");
                 $products_p .= '_';
 
                 $products_name .= str_replace('"', '', str_replace("'", "", htmlspecialchars_decode($dskapi_product['name'], ENT_QUOTES)));
@@ -433,7 +433,7 @@ class Dskapigetid implements \Magento\Framework\App\Action\HttpPostActionInterfa
                 'address2' => str_replace('"', '', str_replace("'", "", htmlspecialchars_decode($dskapi_billing_address_1, ENT_QUOTES))),
                 'address2city' => str_replace('"', '', str_replace("'", "", htmlspecialchars_decode($dskapi_billing_city, ENT_QUOTES))),
                 'postcode' => $dskapi_billing_postcode,
-                'price' => $dskapi_price,
+                'price' => number_format($dskapi_price, 2, ".", ""),
                 'address' => str_replace('"', '', str_replace("'", "", htmlspecialchars_decode($dskapi_shipping_address_1, ENT_QUOTES))),
                 'addresscity' => str_replace('"', '', str_replace("'", "", htmlspecialchars_decode($dskapi_shipping_city, ENT_QUOTES))),
                 'products_id' => $products_id,
@@ -460,9 +460,6 @@ class Dskapigetid implements \Magento\Framework\App\Action\HttpPostActionInterfa
                 $dskapi_encrypted = '';
                 openssl_public_encrypt($dskapi_chunk, $dskapi_encrypted, $dskapi_publicKey);
                 $dskapi_output .= $dskapi_encrypted;
-            }
-            if (version_compare(PHP_VERSION, '8.0.0', '<')) {
-                openssl_free_key($dskapi_publicKey);
             }
             $dskapi_output64 = base64_encode($dskapi_output);
 
