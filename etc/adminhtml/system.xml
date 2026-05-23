@@ -36,6 +36,11 @@
                     <comment><![CDATA[Свободно място над бутона в px.]]></comment>
                     <frontend_class>validate-digits</frontend_class>
                 </field>
+                <field id="clear_api_cache" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Кеш на изчисления</label>
+                    <comment><![CDATA[Изтрива локално кешираните отговори от API за вноски (TTL 15 мин.).]]></comment>
+                    <frontend_model>Avalon\Dskapipayment\Block\Adminhtml\System\Config\ClearCacheButton</frontend_model>
+                </field>
             </group>
         </section>
         <section id="payment">

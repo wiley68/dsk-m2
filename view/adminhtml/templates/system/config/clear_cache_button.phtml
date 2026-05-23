@@ -1,0 +1,78 @@
+<?php
+/**
+ * @var \Avalon\Dskapipayment\Block\Adminhtml\System\Config\ClearCacheButton $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
+<div class="dskapipayment-clear-cache">
+    <button
+        type="button"
+        id="dskapipayment-clear-cache-button"
+        class="action-secondary"
+        title="<?= $escaper->escapeHtmlAttr(__('Изтрий кешираните данни')) ?>">
+        <span><?= $escaper->escapeHtml(__('Изтрий кешираните данни')) ?></span>
+    </button>
+    <div
+        id="dskapipayment-clear-cache-message"
+        class="message"
+        style="display: none; margin-top: 10px;"></div>
+</div>
+<script>
+    require(['jquery'], function ($) {
+        'use strict';
+
+        var confirmMessage = <?= /* @noEscape */ json_encode(
+            (string) __('Сигурни ли сте, че искате да изтриете всички кеширани изчисления за вноски?'),
+            JSON_UNESCAPED_UNICODE
+        ) ?>;
+        var $button = $('#dskapipayment-clear-cache-button');
+        var $message = $('#dskapipayment-clear-cache-message');
+
+        $button.on('click', function (event) {
+            event.preventDefault();
+
+            if (!window.confirm(confirmMessage)) {
+                return;
+            }
+
+            $message.hide().removeClass('message-success success message-error error');
+
+            $.ajax({
+                url: <?= /* @noEscape */ json_encode($block->getClearCacheUrl()) ?>,
+                type: 'POST',
+                dataType: 'json',
+                showLoader: true,
+                data: {
+                    form_key: window.FORM_KEY
+                }
+            }).done(function (response) {
+                if (response && response.success) {
+                    $message
+                        .addClass('message-success success')
+                        .text(response.message || '')
+                        .show();
+                } else {
+                    $message
+                        .addClass('message-error error')
+                        .text(
+                            (response && response.message)
+                                ? response.message
+                                : <?= /* @noEscape */ json_encode(
+                                    (string) __('Възникна грешка при изтриване на кеша.'),
+                                    JSON_UNESCAPED_UNICODE
+                                ) ?>
+                        )
+                        .show();
+                }
+            }).fail(function () {
+                $message
+                    .addClass('message-error error')
+                    .text(<?= /* @noEscape */ json_encode(
+                        (string) __('Възникна грешка при изтриване на кеша.'),
+                        JSON_UNESCAPED_UNICODE
+                    ) ?>)
+                    .show();
+            });
+        });
+    });
+</script>
