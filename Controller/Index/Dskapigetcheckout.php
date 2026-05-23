@@ -14,7 +14,13 @@
 
 namespace Avalon\Dskapipayment\Controller\Index;
 
-use \Avalon\Dskapipayment\Helper\Data;
+use Avalon\Dskapipayment\Helper\Data;
+use Avalon\Dskapipayment\Model\DskapiApi;
+use Magento\Checkout\Model\Session;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\UrlInterface;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Dskapigetcheckout Class Doc Comment
@@ -27,30 +33,17 @@ use \Avalon\Dskapipayment\Helper\Data;
  */
 class Dskapigetcheckout implements \Magento\Framework\App\Action\HttpPostActionInterface
 {
-    /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory $_resultJsonFactory
-     */
-    protected $_resultJsonFactory;
+    protected JsonFactory $_resultJsonFactory;
 
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
+    protected StoreManagerInterface $_storeManager;
 
-    /**
-     * @var \Magento\Checkout\Model\Session $checkoutSession
-     */
-    protected $_checkoutSession;
+    protected Session $_checkoutSession;
 
-    /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface
-     */
-    protected $_quoteRepository;
+    protected CartRepositoryInterface $_quoteRepository;
 
-    /**
-     * @var \Avalon\Dskapipayment\Model\DskapiApi
-     */
-    protected $_dskapiApi;
+    protected DskapiApi $_dskapiApi;
+
+    protected UrlInterface $_urlBuilder;
 
     /**
      * Dskapigetcheckout constructor Doc Comment
@@ -62,19 +55,24 @@ class Dskapigetcheckout implements \Magento\Framework\App\Action\HttpPostActionI
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Avalon\Dskapipayment\Model\DskapiApi $dskapiApi
+     * @param Data $helper
+     * @param UrlInterface $urlBuilder
      */
     public function __construct(
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
-        \Avalon\Dskapipayment\Model\DskapiApi $dskapiApi
+        JsonFactory $resultJsonFactory,
+        StoreManagerInterface $storeManager,
+        Session $checkoutSession,
+        CartRepositoryInterface $quoteRepository,
+        DskapiApi $dskapiApi,
+        private readonly Data $helper,
+        UrlInterface $urlBuilder
     ) {
         $this->_resultJsonFactory = $resultJsonFactory;
         $this->_storeManager = $storeManager;
         $this->_checkoutSession = $checkoutSession;
         $this->_quoteRepository = $quoteRepository;
         $this->_dskapiApi = $dskapiApi;
+        $this->_urlBuilder = $urlBuilder;
     }
 
     /**
@@ -115,8 +113,7 @@ class Dskapigetcheckout implements \Magento\Framework\App\Action\HttpPostActionI
     public function execute()
     {
         $json = [];
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $helper = $objectManager->create(Data::class);
+        $helper = $this->helper;
 
         if ($helper->getConfig('avalon_dskapipaymentmethod_tab_options/properties_dskapi/dskapi_cid')) {
             $dskapi_cid = $helper->getConfig('avalon_dskapipaymentmethod_tab_options/properties_dskapi/dskapi_cid');
@@ -200,6 +197,8 @@ class Dskapigetcheckout implements \Magento\Framework\App\Action\HttpPostActionI
         // Add configuration values for popup functionality
         $json['dskapi_cid'] = $dskapi_cid;
         $json['dskapi_live_url'] = $helper->getDskapiLiveUrl();
+        $json['dskapi_getproduct_url'] = $this->_urlBuilder->getUrl('dskapipayment/index/getproduct');
+        $json['dskapi_getproductcustom_url'] = $this->_urlBuilder->getUrl('dskapipayment/index/getproductcustom');
         $json['dskapi_eur'] = $dskapi_eur;
         $json['currency_code'] = $dskapi_currency_code;
         $json['dskapi_module_version'] = $helper->getModuleVersion();

@@ -1,19 +1,23 @@
 <?php
+/**
+ * @var \Avalon\Dskapipayment\Block\Dskapipanel $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 if ($block->isStatus()) {
     if ($block->isServerStatus()) { ?>
         <style>
             @font-face {
                 font-family: 'squad-regular';
-                src: url('<?= $block->escapeUrl($block->getViewFileUrl('Avalon_Dskapipayment::css/Squad-Regular.woff2')) ?>') format('woff2'),
-                    url('<?= $block->escapeUrl($block->getViewFileUrl('Avalon_Dskapipayment::css/Squad-Regular.woff')) ?>') format('woff');
+                src: url('<?= $escaper->escapeUrl($block->getViewFileUrl('Avalon_Dskapipayment::css/Squad-Regular.woff2')) ?>') format('woff2'),
+                    url('<?= $escaper->escapeUrl($block->getViewFileUrl('Avalon_Dskapipayment::css/Squad-Regular.woff')) ?>') format('woff');
                 font-weight: normal;
                 font-style: normal;
             }
 
             @font-face {
                 font-family: 'squad-bold';
-                src: url('<?= $block->escapeUrl($block->getViewFileUrl('Avalon_Dskapipayment::css/Squad-Bold.woff2')) ?>') format('woff2'),
-                    url('<?= $block->escapeUrl($block->getViewFileUrl('Avalon_Dskapipayment::css/Squad-Bold.woff')) ?>') format('woff');
+                src: url('<?= $escaper->escapeUrl($block->getViewFileUrl('Avalon_Dskapipayment::css/Squad-Bold.woff2')) ?>') format('woff2'),
+                    url('<?= $escaper->escapeUrl($block->getViewFileUrl('Avalon_Dskapipayment::css/Squad-Bold.woff')) ?>') format('woff');
                 font-weight: bold;
                 font-style: normal;
             }
@@ -130,19 +134,19 @@ if ($block->isStatus()) {
         </style>
 
         <?php if ($block->getDskapiDeviceIs() == "Yes") { ?>
-            <div class="dskapi_float" onclick="window.open('<?= $block->escapeUrl($block->getHelper()->getDskapiLiveUrl()) ?>/procedure.php', '_blank');">
+            <div class="dskapi_float" onclick="window.open('<?= $escaper->escapeUrl($block->getHelper()->getDskapiLiveUrl()) ?>/procedure.php', '_blank');">
             <?php } else { ?>
                 <div class="dskapi_float" onclick="DskapiChangeContainer();">
                 <?php } ?>
-                <img src="<?= $block->escapeUrl($block->getHelper()->getDskapiLiveUrl()) ?>/dist/img/dsk_logo.png" class="dskapi-my-float">
+                <img src="<?= $escaper->escapeUrl($block->getHelper()->getDskapiLiveUrl()) ?>/dist/img/dsk_logo.png" class="dskapi-my-float">
                 </div>
                 <div class="dskapi-label-container">
                     <div class="dskapi-label-text">
                         <div class="dskapi-label-text-mask">
-                            <img src="<?= $block->escapeHtml($block->getParamsDskapi()->dsk_picture) ?>" class="dskapi_header">
-                            <p class="dskapi_txt1"><?= $block->escapeHtml($block->getParamsDskapi()->dsk_container_txt1) ?></p>
-                            <p class="dskapi_txt2"><?= $block->escapeHtml($block->getParamsDskapi()->dsk_container_txt2) ?></p>
-                            <p class="dskapi-label-text-a"><a href="<?= $block->escapeHtml($block->getParamsDskapi()->dsk_logo_url) ?>" target="_blank" alt="За повече информация">За повече информация</a></p>
+                            <img src="<?= $escaper->escapeHtml($block->getParamsDskapi()->dsk_picture) ?>" class="dskapi_header">
+                            <p class="dskapi_txt1"><?= $escaper->escapeHtml($block->getParamsDskapi()->dsk_container_txt1) ?></p>
+                            <p class="dskapi_txt2"><?= $escaper->escapeHtml($block->getParamsDskapi()->dsk_container_txt2) ?></p>
+                            <p class="dskapi-label-text-a"><a href="<?= $escaper->escapeHtml($block->getParamsDskapi()->dsk_logo_url) ?>" target="_blank" alt="За повече информация">За повече информация</a></p>
                         </div>
                     </div>
                 </div>

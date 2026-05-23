@@ -11,5 +11,26 @@
         "constraint": {
             "PRIMARY": true
         }
+    },
+    "dskapipayment_api_cache": {
+        "column": {
+            "id": true,
+            "cache_key": true,
+            "cid": true,
+            "product_id": true,
+            "price": true,
+            "installments": true,
+            "response_json": true,
+            "created_at": true,
+            "expires_at": true
+        },
+        "index": {
+            "DSKAPIPAYMENT_API_CACHE_EXPIRES_AT": true,
+            "DSKAPIPAYMENT_API_CACHE_CID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DSKAPIPAYMENT_API_CACHE_CACHE_KEY": true
+        }
     }
 }

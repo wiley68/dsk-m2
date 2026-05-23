@@ -11,4 +11,27 @@
             <column name="order_id"/>
         </index>
     </table>
+    <table name="dskapipayment_api_cache" resource="default" engine="innodb" comment="DSK API product response cache">
+        <column xsi:type="int" name="id" padding="11" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="varchar" name="cache_key" length="64" nullable="false" comment="Cache key"/>
+        <column xsi:type="varchar" name="cid" length="64" nullable="false" comment="Calculator ID"/>
+        <column xsi:type="int" name="product_id" padding="11" unsigned="true" nullable="false" default="0" comment="Product ID"/>
+        <column xsi:type="decimal" name="price" scale="2" precision="12" nullable="false" comment="Price"/>
+        <column xsi:type="smallint" name="installments" padding="5" unsigned="true" nullable="false" default="0" comment="Installments"/>
+        <column xsi:type="text" name="response_json" nullable="false" comment="Cached JSON response"/>
+        <column xsi:type="datetime" name="created_at" nullable="false" comment="Created at"/>
+        <column xsi:type="datetime" name="expires_at" nullable="false" comment="Expires at"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="DSKAPIPAYMENT_API_CACHE_CACHE_KEY">
+            <column name="cache_key"/>
+        </constraint>
+        <index referenceId="DSKAPIPAYMENT_API_CACHE_EXPIRES_AT" indexType="btree">
+            <column name="expires_at"/>
+        </index>
+        <index referenceId="DSKAPIPAYMENT_API_CACHE_CID" indexType="btree">
+            <column name="cid"/>
+        </index>
+    </table>
 </schema>

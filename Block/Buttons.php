@@ -61,6 +61,11 @@ class Buttons extends \Magento\Framework\View\Element\Template
     protected $_helper;
 
     /**
+     * @var \Avalon\Dskapipayment\Model\Service\CpApi
+     */
+    protected $_cpApi;
+
+    /**
      * @var string|null
      */
     protected $_currencyCode;
@@ -82,6 +87,7 @@ class Buttons extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\App\Request\Http $request_http
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Avalon\Dskapipayment\Helper\Data $helper
+     * @param \Avalon\Dskapipayment\Model\Service\CpApi $cpApi
      * @param array $data
      */
     public function __construct(
@@ -92,6 +98,7 @@ class Buttons extends \Magento\Framework\View\Element\Template
         \Magento\Framework\App\Request\Http $request_http,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Avalon\Dskapipayment\Helper\Data $helper,
+        \Avalon\Dskapipayment\Model\Service\CpApi $cpApi,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -101,6 +108,7 @@ class Buttons extends \Magento\Framework\View\Element\Template
         $this->_request_http = $request_http;
         $this->_storeManager = $storeManager;
         $this->_helper = $helper;
+        $this->_cpApi = $cpApi;
         $this->_dskapi_eur = $this->retrieveEur();
         $this->_paramsdskapi = $this->retrieveParamsDskapi();
     }
@@ -139,34 +147,13 @@ class Buttons extends \Magento\Framework\View\Element\Template
             return null;
         }
         $dskapi_product_id = $dskapi_product->getId();
-        $dskapi_price = $this->getPrice();
-
-        $this->_curl->setOption(CURLOPT_SSL_VERIFYPEER, false);
-        $this->_curl->setOption(CURLOPT_RETURNTRANSFER, true);
-        $this->_curl->setOption(CURLOPT_MAXREDIRS, 3);
-        $this->_curl->setOption(CURLOPT_TIMEOUT, 6);
-        $this->_curl->setOption(CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-        $this->_curl->setOption(CURLOPT_CUSTOMREQUEST, 'GET');
-        $this->_curl->get(
-            $this->getDskapiLiveUrl() .
-                '/function/getproduct.php?cid=' .
-                $dskapi_cid .
-                '&price=' .
-                $dskapi_price .
-                '&product_id=' .
-                $dskapi_product_id
-        );
-        $response = $this->_curl->getBody();
-        $status = (int)$this->_curl->getStatus();
-        if ($status < 200 || $status >= 300) {
-            return null;
-        }
-        $paramsdskapi = json_decode($response);
-        if (json_last_error() !== JSON_ERROR_NONE) {
+        $dskapi_price = (float) $this->getPrice();
+        $response = $this->_cpApi->fetchProductApi($dskapi_price, (int) $dskapi_product_id, $dskapi_cid);
+        if ($response === null) {
             return null;
         }
 
-        return $paramsdskapi;
+        return json_decode(json_encode($response));
     }
 
     /**
@@ -269,7 +256,7 @@ class Buttons extends \Magento\Framework\View\Element\Template
      * Buttons getCurrencyCode function,
      * return params
      *
-     * @return int
+     * @return string
      */
     public function getCurrencyCode(): string
     {
@@ -365,6 +352,16 @@ class Buttons extends \Magento\Framework\View\Element\Template
     {
         $dskapi_cid = (string)$this->_helper->getConfig('avalon_dskapipaymentmethod_tab_options/properties_dskapi/dskapi_cid');
         return $dskapi_cid ?: "";
+    }
+
+    /**
+     * Cached proxy URL for getproductcustom (frontend AJAX).
+     *
+     * @return string
+     */
+    public function getGetProductCustomUrl(): string
+    {
+        return $this->getUrl('dskapipayment/index/getproductcustom');
     }
 
     /**

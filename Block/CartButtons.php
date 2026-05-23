@@ -56,6 +56,11 @@ class CartButtons extends \Magento\Framework\View\Element\Template
     protected $_helper;
 
     /**
+     * @var \Avalon\Dskapipayment\Model\Service\CpApi
+     */
+    protected $_cpApi;
+
+    /**
      * @var int
      */
     protected $_dskapi_eur;
@@ -71,6 +76,7 @@ class CartButtons extends \Magento\Framework\View\Element\Template
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Avalon\Dskapipayment\Helper\Data $helper
+     * @param \Avalon\Dskapipayment\Model\Service\CpApi $cpApi
      * @param array $data
      */
     public function __construct(
@@ -80,6 +86,7 @@ class CartButtons extends \Magento\Framework\View\Element\Template
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Avalon\Dskapipayment\Helper\Data $helper,
+        \Avalon\Dskapipayment\Model\Service\CpApi $cpApi,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -88,6 +95,7 @@ class CartButtons extends \Magento\Framework\View\Element\Template
         $this->_storeManager = $storeManager;
         $this->_checkoutSession = $checkoutSession;
         $this->_helper = $helper;
+        $this->_cpApi = $cpApi;
         $this->_dskapi_eur = $this->retrieveEur();
         $this->_paramsdskapi = $this->retrieveParamsDskapi();
     }
@@ -182,30 +190,12 @@ class CartButtons extends \Magento\Framework\View\Element\Template
                 break;
         }
 
-        $this->_curl->setOption(CURLOPT_SSL_VERIFYPEER, false);
-        $this->_curl->setOption(CURLOPT_RETURNTRANSFER, true);
-        $this->_curl->setOption(CURLOPT_MAXREDIRS, 3);
-        $this->_curl->setOption(CURLOPT_TIMEOUT, 6);
-        $this->_curl->setOption(CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-        $this->_curl->setOption(CURLOPT_CUSTOMREQUEST, 'GET');
-        $this->_curl->get(
-            $this->getDskapiLiveUrl() .
-                '/function/getproduct.php?cid=' .
-                $dskapi_cid .
-                '&price=' .
-                $dskapi_price .
-                '&product_id=' .
-                $dskapi_product_id
-        );
-        $response = $this->_curl->getBody();
-
-        if ($response != null) {
-            $paramsdskapi = json_decode($response);
-            if ($paramsdskapi && json_last_error() === JSON_ERROR_NONE) {
-                return $paramsdskapi;
-            }
+        $response = $this->_cpApi->fetchProductApi((float) $dskapi_price, (int) $dskapi_product_id, $dskapi_cid);
+        if ($response === null) {
+            return null;
         }
-        return null;
+
+        return json_decode(json_encode($response));
     }
 
     /**
@@ -385,6 +375,16 @@ class CartButtons extends \Magento\Framework\View\Element\Template
     {
         $dskapi_cid = $this->_helper->getConfig('avalon_dskapipaymentmethod_tab_options/properties_dskapi/dskapi_cid');
         return $dskapi_cid ?: "";
+    }
+
+    /**
+     * Cached proxy URL for getproductcustom (frontend AJAX).
+     *
+     * @return string
+     */
+    public function getGetProductCustomUrl(): string
+    {
+        return $this->getUrl('dskapipayment/index/getproductcustom');
     }
 
     /**
