@@ -91,15 +91,14 @@
         class="modalpayment_dskapi">
         <div class="modalpayment-content_dskapi">
             <div id="dskapi_body">
-                <div class="<?= $escaper->escapeHtml($block->getDskapiClasses()->dskapi_PopUp_Detailed_v1) ?>">
-                    <div class="<?= $escaper->escapeHtml($block->getDskapiClasses()->dskapi_Mask) ?>">
-                        <img
-                            src="<?= $escaper->escapeHtml($block->getDskapiClasses()->dskapi_picture) ?>"
-                            class="dskapi_header">
-                        <p class="<?= $escaper->escapeHtml($block->getDskapiClasses()->dskapi_product_name) ?>">Купи на
+                <div class="dskapi_PopUp_Detailed_v1">
+                    <div class="dskapi_Mask">
+                        <img class="dskapi_header dskapi_header--desktop" src="<?= $escaper->escapeUrl($block->getDskapiPopupImageDesktopUrl()) ?>" alt="" />
+                        <img class="dskapi_header dskapi_header--mobile" src="<?= $escaper->escapeUrl($block->getDskapiPopupImageMobileUrl()) ?>" alt="" />
+                        <p class="dskapi_product_name">Купи на
                             изплащане със стоков кредит от Банка ДСК</p>
-                        <div class="<?= $escaper->escapeHtml($block->getDskapiClasses()->dskapi_body_panel_txt3) ?>">
-                            <div class="<?= $escaper->escapeHtml($block->getDskapiClasses()->dskapi_body_panel_txt3_left) ?>">
+                        <div class="dskapi_body_panel_txt3">
+                            <div class="dskapi_body_panel_txt3_left">
                                 <p>
                                     • Улеснена процедура за електронно подписване<br />
                                     • Атрактивни условия по кредита<br />
@@ -107,7 +106,7 @@
                                     • Одобрение до няколко минути изцяло онлайн
                                 </p>
                             </div>
-                            <div class="<?= $escaper->escapeHtml($block->getDskapiClasses()->dskapi_body_panel_txt3_right) ?>">
+                            <div class="dskapi_body_panel_txt3_right">
                                 <select
                                     id="dskapi_pogasitelni_vnoski_input"
                                     class="dskapi_txt_right"
@@ -124,8 +123,8 @@
                                         <?php } ?>
                                     <?php } ?>
                                 </select>
-                                <div class="<?= $escaper->escapeHtml($block->getDskapiClasses()->dskapi_sumi_panel) ?>">
-                                    <div class="<?= $escaper->escapeHtml($block->getDskapiClasses()->dskapi_kredit_panel) ?>">
+                                <div class="dskapi_sumi_panel">
+                                    <div class="dskapi_kredit_panel">
                                         <div class="dskapi_sumi_txt">Размер на кредита /<?= $escaper->escapeHtml($block->getDskapiSign()) ?>/</div>
                                         <div>
                                             <input
@@ -136,7 +135,7 @@
                                                 value="<?= $escaper->escapeHtml(number_format($block->getPrice(), 2, ".", "")) ?>" />
                                         </div>
                                     </div>
-                                    <div class="<?= $escaper->escapeHtml($block->getDskapiClasses()->dskapi_kredit_panel) ?>">
+                                    <div class="dskapi_kredit_panel">
                                         <div class="dskapi_sumi_txt">Месечна вноска /<?= $escaper->escapeHtml($block->getDskapiSign()) ?>/</div>
                                         <div>
                                             <input
@@ -148,8 +147,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="<?= $escaper->escapeHtml($block->getDskapiClasses()->dskapi_sumi_panel) ?>">
-                                    <div class="<?= $escaper->escapeHtml($block->getDskapiClasses()->dskapi_kredit_panel) ?>">
+                                <div class="dskapi_sumi_panel">
+                                    <div class="dskapi_kredit_panel">
                                         <div class="dskapi_sumi_txt">Обща дължима сума /<?= $escaper->escapeHtml($block->getDskapiSign()) ?>/</div>
                                         <div>
                                             <input
@@ -160,7 +159,7 @@
                                                 value="<?= $escaper->escapeHtml(number_format($block->getParamsDskapi()->dsk_vnoska * $block->getParamsDskapi()->dsk_vnoski_default, 2, ".", "")); ?>" />
                                         </div>
                                     </div>
-                                    <div class="<?= $escaper->escapeHtml($block->getDskapiClasses()->dskapi_kredit_panel) ?>">
+                                    <div class="dskapi_kredit_panel">
                                         <div class="dskapi_sumi_txt">ГПР /%/</div>
                                         <div>
                                             <input
@@ -174,18 +173,18 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="<?= $escaper->escapeHtml($block->getDskapiClasses()->dskapi_body_panel_txt4) ?>">
+                        <div class="dskapi_body_panel_txt4">
                             Изчисленията са направени при допускането за първа падежна дата след 30 дни и са с насочваща
                             цел. Избери най-подходящата месечна вноска.
                         </div>
-                        <div class="<?= $escaper->escapeHtml($block->getDskapiClasses()->dskapi_body_panel_footer) ?>">
+                        <div class="dskapi_body_panel_footer">
                             <div
                                 class="dskapi_btn"
                                 id="dskapi_buy_credit">Купи на изплащане</div>
                             <div
                                 class="dskapi_btn_cancel"
                                 id="dskapi_back_credit">Откажи</div>
-                            <div class="<?= $escaper->escapeHtml($block->getDskapiClasses()->dskapi_body_panel_left) ?>">
+                            <div class="dskapi_body_panel_left">
                                 <div class="dskapi_txt_footer">Ver. <?= $escaper->escapeHtml($block->getModuleVersion()) ?>
                                 </div>
                             </div>

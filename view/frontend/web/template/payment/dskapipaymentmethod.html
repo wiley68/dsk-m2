@@ -68,10 +68,16 @@
                     >
                         <div class="dskapi_Mask" id="dskapi_checkout_mask">
                             <img
-                                src=""
-                                id="dskapi_checkout_header_img"
-                                class="dskapi_header"
-                                data-bind="attr: {src: dskapiCheckoutPicture}"
+                                id="dskapi_checkout_header_img_desktop"
+                                class="dskapi_header dskapi_header--desktop"
+                                alt=""
+                                data-bind="attr: {src: dskapiCheckoutPictureDesktop}"
+                            />
+                            <img
+                                id="dskapi_checkout_header_img_mobile"
+                                class="dskapi_header dskapi_header--mobile"
+                                alt=""
+                                data-bind="attr: {src: dskapiCheckoutPictureMobile}"
                             />
                             <p
                                 class="dskapi_product_name"
