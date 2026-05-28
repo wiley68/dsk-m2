@@ -15,6 +15,7 @@
 namespace Avalon\Dskapipayment\Model;
 
 use \Avalon\Dskapipayment\Helper\Data;
+use Avalon\Dskapipayment\Model\Service\CpApi;
 
 /**
  * Status Class Doc Comment
@@ -33,6 +34,11 @@ class Status implements \Avalon\Dskapipayment\Api\StatusInterface
     protected $_resorce;
 
     /**
+     * @var CpApi
+     */
+    private $cpApi;
+
+    /**
      * Status constructor Doc Comment
      *
      * Status Class constructor
@@ -40,9 +46,11 @@ class Status implements \Avalon\Dskapipayment\Api\StatusInterface
      * @param \Magento\Framework\App\ResourceConnection $resource
      */
     public function __construct(
-        \Magento\Framework\App\ResourceConnection $resource
+        \Magento\Framework\App\ResourceConnection $resource,
+        CpApi $cpApi
     ) {
         $this->_resorce = $resource;
+        $this->cpApi = $cpApi;
     }
 
     /**
@@ -86,5 +94,34 @@ class Status implements \Avalon\Dskapipayment\Api\StatusInterface
         $json['calculator_id'] = $calculator_id;
 
         return json_encode($json, JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * @param string $cid
+     * @return array
+     */
+    public function clearCache($cid)
+    {
+        if (!$this->cpApi->isRequestFromControlPanel()) {
+            return [
+                'ok' => false,
+                'status' => 403,
+                'message' => 'Forbidden',
+            ];
+        }
+
+        $payload = $this->cpApi->processClearCacheRequest((string) $cid);
+        $httpStatus = (int) ($payload['_http_status'] ?? 200);
+        unset($payload['_http_status']);
+
+        $isSuccess = (bool) ($payload['success'] ?? false);
+
+        return [
+            'ok' => $isSuccess,
+            'status' => $httpStatus,
+            'message' => $isSuccess
+                ? ('Cache cleared. Deleted records: ' . (int) ($payload['deleted'] ?? 0))
+                : (string) ($payload['message'] ?? 'Forbidden'),
+        ];
     }
 }

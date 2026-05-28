@@ -6,4 +6,10 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
+    <route url="/V1/dskapi/clearCache" method="POST">
+        <service class="Avalon\Dskapipayment\Api\StatusInterface" method="clearCache"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
 </routes>

@@ -35,4 +35,13 @@ interface StatusInterface
      * @return string
      */
     public function orderUpdate($order_id, $status, $calculator_id);
+
+    /**
+     * Clear module API cache for configured CID.
+     *
+     * @api
+     * @param string $cid
+     * @return array
+     */
+    public function clearCache($cid);
 }
