@@ -372,7 +372,10 @@ class Dskapigetid implements \Magento\Framework\App\Action\HttpPostActionInterfa
                 $products_q .= $cart_item->getQtyOrdered();
                 $products_q .= '_';
 
-                $products_p_temp = (float)$cart_item->getPrice();
+                $qty = (float) $cart_item->getQtyOrdered();
+                $products_p_temp = $qty > 0
+                    ? (float) $cart_item->getRowTotalInclTax() / $qty
+                    : 0.0;
                 switch ($this->getEur()) {
                     case 0:
                         break;
